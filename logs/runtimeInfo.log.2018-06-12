@@ -1,0 +1,2 @@
+2018-06-12 10:11:55  [ AMQP Connection 39.108.48.22:5672:0 ] - [ WARN ]  An unexpected connection driver error occured (Exception message: Connection reset)
+2018-06-12 10:11:55  [ AMQP Connection 39.108.48.22:5672:10 ] - [ WARN ]  An unexpected connection driver error occured (Exception message: Connection reset)
