@@ -16,13 +16,10 @@ import BLL.util.BitCoverter;
 
 public class demo {
     public static void main(String[] args) {
-//        short s = 0x3333;
-        byte[] arr = BitCoverter.getBytes(0x3333333333333333L);
-        for (byte b : arr) {
-            System.out.println(b);
-        }
         
+    
     }
+    
     
     private static byte[] longToByteArray(long l) {
         byte[] retVal = new byte[8];

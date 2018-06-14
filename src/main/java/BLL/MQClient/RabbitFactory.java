@@ -1,10 +1,13 @@
 package BLL.MQClient;
 
+import BLL.util.JSONCoverter;
+import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 /**********************************************
@@ -21,23 +24,24 @@ import java.util.concurrent.TimeoutException;
 public class RabbitFactory {
     
     private static Logger logger = Logger.getLogger(RabbitFactory.class);
-    private static String rabbitHost = "j2web.cn";
-    private static String rabbitUserName = "guest";
-    private static String rabbitPassword = "guest";
-    private static ConnectionFactory connectionFacory = new ConnectionFactory();
-    private static Connection connection;
+    
     
     /**
      * 获取一个新的RabbitMQ Socket连接
      *
-     * @return
+     * @return RabbitMQ的连接
      */
     public static Connection getConnection() {
+        String rabbitHost = MQTaskConfig.mqToDTUTask.getString("host");
+        String rabbitUserName = MQTaskConfig.mqToDTUTask.getString("userName");
+        String rabbitPassword = MQTaskConfig.mqToDTUTask.getString("userPassword");
+        ConnectionFactory connectionFacory = new ConnectionFactory();
+        
         connectionFacory.setHost(rabbitHost);
         connectionFacory.setUsername(rabbitUserName);
         connectionFacory.setPassword(rabbitPassword);
         try {
-            connection = connectionFacory.newConnection();
+            return connectionFacory.newConnection();
         } catch (IOException e) {
             logger.error("IO连接异常.获取连接失败.");
             e.printStackTrace();
@@ -45,6 +49,6 @@ public class RabbitFactory {
             logger.error("连接超时,获取连接失败.");
             e.printStackTrace();
         }
-        return connection;
+        return null;
     }
 }

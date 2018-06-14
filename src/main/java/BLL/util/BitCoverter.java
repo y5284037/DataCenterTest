@@ -95,7 +95,7 @@ public class BitCoverter {
         ByteBuffer byteBuffer = ByteBuffer.allocate(8);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.putLong(num);
-    
+        
         return byteBuffer.array();
         
     }
@@ -117,7 +117,7 @@ public class BitCoverter {
         ByteBuffer byteBuffer = ByteBuffer.allocate(4);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.putInt(num);
-    
+        
         return byteBuffer.array();
     }
     
@@ -138,7 +138,7 @@ public class BitCoverter {
         ByteBuffer byteBuffer = ByteBuffer.allocate(2);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.putShort(num);
-    
+        
         return byteBuffer.array();
     }
 }

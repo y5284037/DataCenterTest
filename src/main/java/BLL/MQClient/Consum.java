@@ -1,9 +1,12 @@
 package BLL.MQClient;
 
-import BLL.constant.common.MqConfig;
+import BLL.util.JSONCoverter;
+import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
+import lombok.Data;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**********************************************
  *
@@ -16,32 +19,42 @@ import java.io.IOException;
  *
  **********************************************/
 
+@Data
 public class Consum {
     
-    
-    public  void startConsum() {
+    /**
+     * 开启消费函数
+     */
+    public void startConsum() {
         startDataConsum();
         startEventConsum();
     }
     
-    private  void startEventConsum() {
+    /**
+     * 开启事件消费
+     */
+    private void startEventConsum() {
         try {
-            Channel eventChannel = RabbitFactory.getConnection().createChannel(1001);
-            eventChannel.queueBind(MqConfig.EVENT_QUEUE, MqConfig.EVENT_EXCHANGE, MqConfig.EVENT_ROUTINGKEY);
+            String eventQueue = MQTaskConfig.dtuEventToMQTask.getString("queue");
+            int eventChannelNum = Integer.valueOf(MQTaskConfig.dtuEventToMQTask.getString("channel"));
+            Channel eventChannel = RabbitFactory.getConnection().createChannel(eventChannelNum);
             EventConsumer eventConsumer = new EventConsumer(eventChannel);
-            eventChannel.basicConsume(MqConfig.EVENT_QUEUE, false, eventConsumer);
+            eventChannel.basicConsume(eventQueue, false, eventConsumer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
     }
     
-    private  void startDataConsum() {
+    /**
+     * 开启数据消费
+     */
+    private void startDataConsum() {
         try {
-            Channel dataChannel = RabbitFactory.getConnection().createChannel(1000);
-            dataChannel.queueBind(MqConfig.DATA_QUEUE, MqConfig.DATA_EXCHANGE, MqConfig.DATA_ROUTINGKEY);
+            String dataQueue = MQTaskConfig.dtuDataToMQTask.getString("queue");
+            int dataChannelNum = Integer.valueOf(MQTaskConfig.dtuDataToMQTask.getString("channel"));
+            Channel dataChannel = RabbitFactory.getConnection().createChannel(dataChannelNum);
             DataConsumer dataConsumer = new DataConsumer(dataChannel);
-            dataChannel.basicConsume(MqConfig.DATA_QUEUE, false, dataConsumer);
+            dataChannel.basicConsume(dataQueue, false, dataConsumer);
         } catch (IOException e) {
             e.printStackTrace();
         }

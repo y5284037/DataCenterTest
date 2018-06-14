@@ -1,5 +1,6 @@
 package BLL.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -18,10 +19,10 @@ import java.util.HashMap;
 public class DCUHwModel {
     
     private static Logger logger = Logger.getLogger(DCUHwModel.class);
-    private static HashMap<String,String> hwModel;
+    private static JSONObject hwModel;
     
     static {
-        hwModel = new HashMap<>();
+        hwModel = new JSONObject();
         LoadHardwareModelConfig();//在静态代码块中执行是为了作为驱动加载一次
     }
     
@@ -32,7 +33,7 @@ public class DCUHwModel {
     
     public static String getName(int modelNum){
         
-        return hwModel.get(Integer.toString(modelNum));
+        return hwModel.getString(Integer.toString(modelNum));
     }
     
 }

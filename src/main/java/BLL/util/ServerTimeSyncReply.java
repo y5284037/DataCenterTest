@@ -17,23 +17,28 @@ import lombok.Data;
 @Data
 public class ServerTimeSyncReply {
     
-    public long dcuTimeSyncReqID;	// 从DCU发送的时间同步请求ID。
-    public long serverTime; 			// 服务器的系统时间，以时间戳的形式。
+    private long dcuTimeSyncReqID;    // 从DCU发送的时间同步请求ID。
+    private long serverTime;            // 服务器的系统时间，以时间戳的形式。
     
-    public  byte[] serialize() {
+    /**
+     * 序列化时间同步应答.
+     *
+     * @return
+     */
+    public byte[] serialize() {
         
         int offset = 0;
         byte[] binaryData = new byte[SizeOf.INT_8 + SizeOf.INT_64 + SizeOf.INT_64];
         byte[] elem;
-    
+        
         elem = new byte[]{DataCenterPkgType.TIME_SYNC_REPLY};
-        System.arraycopy(elem,0,binaryData,offset,elem.length);
+        System.arraycopy(elem, 0, binaryData, offset, elem.length);
         offset += elem.length;
-    
+        
         elem = BitCoverter.getBytes(dcuTimeSyncReqID);
         System.arraycopy(elem, 0, binaryData, offset, elem.length);
         offset += elem.length;
-    
+        
         elem = BitCoverter.getBytes(serverTime);
         System.arraycopy(elem, 0, binaryData, offset, elem.length);
         

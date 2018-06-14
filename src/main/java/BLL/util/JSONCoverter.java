@@ -1,5 +1,6 @@
 package BLL.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import org.apache.log4j.Logger;
 
@@ -26,9 +27,10 @@ public class JSONCoverter {
      * @param fileName 配置文件名
      * @return
      */
-    public static HashMap<String, String> JsonFileToMap(String fileName) {
-        
-        HashMap<String, String> map = new HashMap<>();
+    public static JSONObject JsonFileToMap(String fileName) {
+    
+        JSONObject jsonObject = new JSONObject();
+    
         
         File file = new File(System.getProperty("user.dir") + "\\src\\main\\rsources\\" + fileName);
         
@@ -39,10 +41,10 @@ public class JSONCoverter {
             while (JsonFileReader.hasNext()) {//判断是否还有下一组json(key,value).
                 String key= JsonFileReader.readString();
                 String value =JsonFileReader.readObject().toString();//每读一次object会把行往下移动.下一次读String,就是新的一行的key.
-                map.put( key,value);
+                jsonObject.put( key,value);
             }
             fileReader.close();//关流释放资源
-            return map;
+            return jsonObject;
         } catch (FileNotFoundException e) {
             logger.error("无法找到"+fileName+",请确认该文件在resources下!");
             e.printStackTrace();
@@ -51,6 +53,6 @@ public class JSONCoverter {
             e.printStackTrace();
             System.exit(-101);
         }
-        return map;
+        return null;
     }
 }

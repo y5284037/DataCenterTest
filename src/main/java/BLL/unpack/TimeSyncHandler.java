@@ -19,19 +19,31 @@ import BLL.util.ServerTimeSyncReply;
 public class TimeSyncHandler {
     
     public  void handleTimeSyncRequest(String dtuID, DCUInfo dcuInfo, byte[] dtuData, int offset) {
-        ServerTimeSyncReply reply = new ServerTimeSyncReply();
-//        reply.setDcuTimeSyncReqID();
-        long dcuTimeSyncReqID = 0;
-        
-        unpackTimeSyncReqPkg(dcuTimeSyncReqID, dtuData, offset);
-    
+        long dcuTimeSyncReqID = BitCoverter.toUint64(dtuData, offset);
+//        unpackTimeSyncReqPkg(dcuTimeSyncReqID, dtuData, offset);
         long currentTime = System.currentTimeMillis();
+        doTimeSyncRequest(dtuID, dcuInfo, dcuTimeSyncReqID, currentTime);
+        
         
     }
     
-    private  int unpackTimeSyncReqPkg(long dcuTimeSyncReqID, byte[] dtuData, int offset) {
+    private boolean doTimeSyncRequest(String dtuID, DCUInfo dcuInfo, long dcuTimeSyncReqID, long currentTime) {
+        ServerTimeSyncReply reply = new ServerTimeSyncReply();
+        reply.setDcuTimeSyncReqID(dcuTimeSyncReqID);
+        reply.setServerTime(currentTime);
+        return true;
+    }
     
-        dcuTimeSyncReqID = BitCoverter.toUint64(dtuData, offset);
+    
+    /**
+     * java不支持指针传递,所以只有把这个函数写到执行函数内,否则就需要使用对象对基本数据进行包装,在对象内操作.无意义
+     * @param dcuTimeSyncReqID
+     * @param dtuData
+     * @param offset
+     * @return
+     */
+    private  int unpackTimeSyncReqPkg(long dcuTimeSyncReqID, byte[] dtuData, int offset) {
+        dcuTimeSyncReqID=BitCoverter.toUint64(dtuData, offset);
         return SizeOf.INT_64;
     }
 }
