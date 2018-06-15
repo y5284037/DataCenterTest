@@ -1,5 +1,6 @@
 package BLL.unpack;
 
+import BLL.MQClient.Produce;
 import BLL.constant.common.SizeOf;
 import BLL.model.DCUInfo;
 import BLL.util.BitCoverter;
@@ -18,6 +19,12 @@ import BLL.util.ServerTimeSyncReply;
 
 public class TimeSyncHandler {
     
+    private static Produce produce;
+    
+    static {
+        produce = new Produce();
+    }
+    
     public  void handleTimeSyncRequest(String dtuID, DCUInfo dcuInfo, byte[] dtuData, int offset) {
         long dcuTimeSyncReqID = BitCoverter.toUint64(dtuData, offset);
 //        unpackTimeSyncReqPkg(dcuTimeSyncReqID, dtuData, offset);
@@ -30,7 +37,8 @@ public class TimeSyncHandler {
     private boolean doTimeSyncRequest(String dtuID, DCUInfo dcuInfo, long dcuTimeSyncReqID, long currentTime) {
         ServerTimeSyncReply reply = new ServerTimeSyncReply();
         reply.setDcuTimeSyncReqID(dcuTimeSyncReqID);
-        reply.setServerTime(currentTime);
+        reply.setServerTime(currentTime/1000);
+        produce.publish(Produce.outToCdzs, UnPackProcess.makeDtuOutData(dtuID,reply.serialize()));
         return true;
     }
     

@@ -16,7 +16,8 @@ import BLL.util.BitCoverter;
 
 public class demo {
     public static void main(String[] args) {
-        
+        byte b =(byte)151;
+        System.out.println(b);
     
     }
     

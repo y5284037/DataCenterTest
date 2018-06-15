@@ -35,8 +35,6 @@ public class MQTaskConfig {
     }
     
     public static void main(String[] args) {
-        for (Object s : dataOutQueue) {
-            System.out.println((String) s);
-        }
+        System.out.println(mqToDTUTask.get(""));
     }
 }

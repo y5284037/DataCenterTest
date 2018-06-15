@@ -1,13 +1,11 @@
 package BLL.MQClient;
 
 import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.AMQP.BasicProperties;
 
 import java.io.IOException;
-import java.util.Properties;
-import java.util.concurrent.TimeoutException;
 
 /**********************************************
  *
@@ -23,21 +21,25 @@ import java.util.concurrent.TimeoutException;
 public class Produce {
     
     private Channel channel;
-    private static BasicProperties properties;
+    private static BasicProperties  properties;
     
-//    private static
+    public static String outToCdzs;
+    public static String outToBT;
+    private static String exchange;
+    
     /**
      * queue和exchange只需要声明一次即可,所以尽量避免多次声明,只有在第一次获取Produce的时候去声明.
      */
     static {
         Connection connection = RabbitFactory.getConnection();
-        try {
-            //为持久化属性赋值
-            AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
-            builder.deliveryMode(2);//2代表持久化,1代表不持久化
-            properties = builder.build();
-            
-            //声明exchange和queue
+        //为持久化属性赋值
+        AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
+        builder.deliveryMode(2);//2代表持久化,1代表不持久化
+        properties = builder.build();
+        outToCdzs = (String) MQTaskConfig.dataOutQueue.get(0);
+        outToBT = (String) MQTaskConfig.dataOutQueue.get(1);
+        exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
+           /* //声明exchange和queue
             Channel channel = connection.createChannel();
             String exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
             String exchangeType = MQTaskConfig.mqToDTUTask.getString("exchangeType");
@@ -46,25 +48,32 @@ public class Produce {
             for (Object queue : MQTaskConfig.dataOutQueue) {
                 channel.queueDeclare((String) queue, true, false, false, null);
             }
-//            channel.queueBind((String)MQTaskConfig.dataOutQueue.,)
+       
             channel.close();
-            connection.close();
-        } catch (IOException | TimeoutException e) {
-            System.out.println("声明exchange和queue时超时 or 连接错误,请及时处理.");
-            e.printStackTrace();
-            System.exit(-102);
-        }
+            connection.close();*/
     }
     
-    public Produce(String queue, String exchange, String bingingKey) {
+    
+    public Produce() {
         Connection connection = RabbitFactory.getConnection();
         try {
             channel = connection.createChannel();
-            channel.queueBind(queue, exchange, bingingKey);
-            
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
+    public boolean publish(String queue, byte[] message) {
+        try {
+            channel.basicPublish(exchange,queue,properties,message);
+            
+        } catch (IOException e) {
+            System.out.println("发送失败,出现IO异常!");
+            e.printStackTrace();
+            return false;
+        }
+        
+        return true;
+    }
+    
 }

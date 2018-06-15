@@ -6,7 +6,9 @@ import BLL.model.DCUCollectData;
 import BLL.model.DCUInfo;
 import BLL.model.DCUPortData;
 import BLL.model.DcuDataPkgInfo;
+import com.alibaba.fastjson.JSONObject;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class UnPackProcess {
     private DCUPortDataPkgParser_P1 dcuPortDataPkgParser_p1 = new DCUPortDataPkgParser_P1();
     private DCUPortDataPkgParser_P2 dcuPortDataPkgParser_p2 = new DCUPortDataPkgParser_P2();
     private DCUDataPkgParser dcuDataPkgParser = new DCUDataPkgParser();
+    private TimeSyncHandler timeSyncHandler = new TimeSyncHandler();
     
     /**
      * @param dtuID
@@ -68,8 +71,8 @@ public class UnPackProcess {
             //时间同步请求包
             case DCUDataPkgType
                     .TIME_SYNC_REQUEST:
+                timeSyncHandler.handleTimeSyncRequest(dtuID, dcuDataPkgInfo.getDcuInfo(), dtuData, offset);
                 
-                ;
                 break;
             
         }
@@ -86,7 +89,20 @@ public class UnPackProcess {
                 
                 }
                 break;
+            //时间同步请求包
+            case DCUDataPkgType
+                    .TIME_SYNC_REQUEST:
+                timeSyncHandler.handleTimeSyncRequest(dtuID, dcuDataPkgInfo.getDcuInfo(), dtuData, offset);
+                break;
         }
     }
     
+    
+    public static byte[] makeDtuOutData(String dtuID,byte[] dtuData){
+        Base64.Encoder encoder = Base64.getEncoder();
+        JSONObject dtuOutData = new JSONObject();
+        dtuOutData.put("DTUID", dtuData);
+        dtuOutData.put("Data", encoder.encodeToString(dtuData));
+        return dtuOutData.toString().getBytes();
+    }
 }

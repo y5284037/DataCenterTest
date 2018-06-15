@@ -1,6 +1,5 @@
 package BLL.MQClient;
 
-import BLL.unpack.UnPackProcess;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.AMQP;

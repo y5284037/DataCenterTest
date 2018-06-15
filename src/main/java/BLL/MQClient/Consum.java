@@ -1,12 +1,9 @@
 package BLL.MQClient;
 
-import BLL.util.JSONCoverter;
-import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
 import lombok.Data;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 /**********************************************
  *
