@@ -21,8 +21,6 @@ import java.io.IOException;
  **********************************************/
 
 public class EventConsumer extends DefaultConsumer {
-    
-    
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      *

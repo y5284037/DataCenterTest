@@ -1,13 +1,10 @@
 package BLL.MQClient;
 
-import BLL.util.JSONCoverter;
-import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 /**********************************************

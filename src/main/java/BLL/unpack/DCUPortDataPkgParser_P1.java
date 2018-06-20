@@ -50,15 +50,12 @@ public class DCUPortDataPkgParser_P1 {
         //获取采集时间
         collectData.setCollectTimestamp(BitCoverter.toUint64(dtuData, offset + unpackedBytes));
         unpackedBytes += SizeOf.INT_64;
-        
         //首先打开端口部分，以便获得端口号范围。
         int first_port = dtuData[offset + unpackedBytes] & 0xFF;
         unpackedBytes += SizeOf.INT_8;
         int last_prot = dtuData[offset + unpackedBytes] & 0xFF;
         unpackedBytes += SizeOf.INT_8;
-        
         unpackPortData(collectData, first_port, last_prot, dtuData, offset + unpackedBytes);
-        
     }
     
     /**

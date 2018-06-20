@@ -1,12 +1,8 @@
 package BLL.MQClient;
 
 import BLL.util.JSONCoverter;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import lombok.Data;
-
-import java.util.HashMap;
 
 /**********************************************
  *
@@ -31,7 +27,7 @@ public class MQTaskConfig {
         dtuDataToMQTask = MQConfig.getJSONObject("dtuDataToMQTask");
         dtuEventToMQTask = MQConfig.getJSONObject("dtuEventToMQTask");
         mqToDTUTask = MQConfig.getJSONObject("mqToDTUTask");
-        dataOutQueue = (JSONArray)mqToDTUTask.get("queue");
+        dataOutQueue = (JSONArray) mqToDTUTask.get("queue");
     }
     
     public static void main(String[] args) {

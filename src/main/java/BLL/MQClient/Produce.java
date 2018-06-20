@@ -31,7 +31,6 @@ public class Produce {
      * queue和exchange只需要声明一次即可,所以尽量避免多次声明,只有在第一次获取Produce的时候去声明.
      */
     static {
-        Connection connection = RabbitFactory.getConnection();
         //为持久化属性赋值
         AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
         builder.deliveryMode(2);//2代表持久化,1代表不持久化
@@ -40,6 +39,7 @@ public class Produce {
         outToBT = (String) MQTaskConfig.dataOutQueue.get(1);
         exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
            /* //声明exchange和queue
+           Connection connection = RabbitFactory.getConnection();
             Channel channel = connection.createChannel();
             String exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
             String exchangeType = MQTaskConfig.mqToDTUTask.getString("exchangeType");
@@ -48,7 +48,6 @@ public class Produce {
             for (Object queue : MQTaskConfig.dataOutQueue) {
                 channel.queueDeclare((String) queue, true, false, false, null);
             }
-       
             channel.close();
             connection.close();*/
     }
@@ -63,9 +62,9 @@ public class Produce {
         }
     }
     
-    public boolean publish(String queue, byte[] message) {
+    public boolean publish(String routingKey, byte[] message) {
         try {
-            channel.basicPublish(exchange,queue,properties,message);
+            channel.basicPublish(exchange,routingKey,properties,message);
             
         } catch (IOException e) {
             System.out.println("发送失败,出现IO异常!");

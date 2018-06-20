@@ -1,7 +1,9 @@
 package BLL.test;
 
 
-import BLL.util.BitCoverter;
+import BLL.util.FixedQueue;
+
+import java.util.Date;
 
 /**********************************************
  *
@@ -15,22 +17,13 @@ import BLL.util.BitCoverter;
  **********************************************/
 
 public class demo {
+    
     public static void main(String[] args) {
-        byte b =(byte)151;
-        System.out.println(b);
-    
-    }
-    
-    
-    private static byte[] longToByteArray(long l) {
-        byte[] retVal = new byte[8];
-        
-        for (int i = 0; i < 8; i++) {
-            retVal[i] = (byte) l;
-            l >>= 8;
+        FixedQueue<Integer> queue = new FixedQueue<>(20);
+        for(int i = 0; i < 40; i++) {
+            queue.offer(i);
         }
+        System.out.println(new Date());
         
-        return retVal;
     }
 }
-

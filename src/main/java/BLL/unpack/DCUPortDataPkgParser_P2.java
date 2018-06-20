@@ -31,7 +31,6 @@ public class DCUPortDataPkgParser_P2 {
     public boolean Unpack(DCUCollectData collectData, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData, int offset) {
         //端口采集数据包解包
         doUnpack(collectData, dtuData, offset);
-        
         return true;
     }
     
@@ -50,26 +49,20 @@ public class DCUPortDataPkgParser_P2 {
         unpackedBytes += SizeOf.INT_16;//移动偏移量
         collectData.setCollectTimestamp(BitCoverter.toUint64(dtuData, offset + unpackedBytes));
         unpackedBytes += SizeOf.INT_64;
-        
         //读取端口种类个数
         int portTypeNum = dtuData[offset + unpackedBytes];
         unpackedBytes += SizeOf.INT_8;
-        
         for (int i = 0; i < portTypeNum; i++) {
             //端口的类型,比如F,B
             byte portType = dtuData[offset + unpackedBytes];
             unpackedBytes += SizeOf.INT_8;
-            
             //获取端口的开始和结束索引号(临时版本就按照全部打包)
             int first_port = BitCoverter.toUint16(dtuData, offset + unpackedBytes);
             unpackedBytes += SizeOf.INT_16;
             int last_port = BitCoverter.toUint16(dtuData, offset + unpackedBytes);
             unpackedBytes += SizeOf.INT_16;
-            
             unpackedBytes += unpackPortData(collectData.getData(), collectData.getCollectTimestamp(), portType, first_port, last_port, dtuData, offset + unpackedBytes);
-            
         }
-        
     }
     
     /**
@@ -88,7 +81,6 @@ public class DCUPortDataPkgParser_P2 {
         int unpackedBytes = 0;
         List<DCUPortData> dcuPortData = new ArrayList<>();
         int portNum = first_port;
-        
         if (portType == AcqPotyType.ACQ_PORT_TYPE_F) {
             for (; portNum <= last_port; portNum++) {
                 int data = BitCoverter.toUint16(dtuData, offset + unpackedBytes);
@@ -132,7 +124,6 @@ public class DCUPortDataPkgParser_P2 {
             }
             portData.put(portType, dcuPortData);
         }
-        
         return unpackedBytes;
     }
 }

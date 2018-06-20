@@ -18,5 +18,4 @@ public class DuplicatePkgSetting {
     private int validPkgDays;
     private boolean enableDuplicateMech;
     private int duplicatePkgDays;
-    
 }

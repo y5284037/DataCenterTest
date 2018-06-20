@@ -25,6 +25,7 @@ import java.util.Base64;
 public class DataConsumer extends DefaultConsumer {
     
     private UnPackProcess unPackProcess = new UnPackProcess();
+    private Channel channel;
     
     /**
      * Constructs a new instance and records its association to the passed-in channel.
@@ -33,6 +34,7 @@ public class DataConsumer extends DefaultConsumer {
      */
     public DataConsumer(Channel channel) {
         super(channel);
+        this.channel = channel;
     }
     
     
@@ -45,7 +47,9 @@ public class DataConsumer extends DefaultConsumer {
         Base64.Decoder decoder = Base64.getDecoder();
         String dtuID = DataJson.getString("DTUID");
         byte[] dtuData = decoder.decode(data);
-        unPackProcess.unpackData(dtuID, dtuData);
+        String routingKey = Produce.outToCdzs;
+        unPackProcess.unpackData(routingKey,dtuID, dtuData);
+        channel.basicAck(envelope.getDeliveryTag(), false);
         
     }
 }

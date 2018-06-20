@@ -19,5 +19,4 @@ public class DCUInfo {
     private long masterDCUID;             // 主机DCU的ID
     private String hardwareModel;        // DCU硬件型号编号
     private String firmwareVersion;     // DCU固件版本号
-    
 }

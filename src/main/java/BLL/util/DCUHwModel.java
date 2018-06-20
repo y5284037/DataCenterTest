@@ -3,8 +3,6 @@ package BLL.util;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 
-import java.util.HashMap;
-
 /**********************************************
  *
  //Copyright© 2014 冷云能源科技有限公司.版权所有

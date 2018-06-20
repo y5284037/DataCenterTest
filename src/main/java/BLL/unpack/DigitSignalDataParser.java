@@ -35,7 +35,6 @@ public class DigitSignalDataParser {
         for (int i = 0; i < num; i++) {
             int data = BitCoverter.toUint16(dtuData, offset + unpackedBytes);
             unpackedBytes += SizeOf.INT_16;
-            
             /*
              * 协议1和协议2.1所对应的实现方法。
 			 * Calculate time & changing status value
@@ -63,6 +62,4 @@ public class DigitSignalDataParser {
         }
         return unpackedBytes;
     }
-    
-    
 }

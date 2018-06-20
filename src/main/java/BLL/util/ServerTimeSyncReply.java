@@ -2,7 +2,10 @@ package BLL.util;
 
 import BLL.constant.common.SizeOf;
 import BLL.constant.dataCenter.DataCenterPkgType;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
+
+import java.util.Base64;
 
 /**********************************************
  *
@@ -26,23 +29,17 @@ public class ServerTimeSyncReply {
      * @return
      */
     public byte[] serialize() {
-        
         int offset = 0;
         byte[] binaryData = new byte[SizeOf.INT_8 + SizeOf.INT_64 + SizeOf.INT_64];
         byte[] elem;
-        
         elem = new byte[]{DataCenterPkgType.TIME_SYNC_REPLY};
         System.arraycopy(elem, 0, binaryData, offset, elem.length);
         offset += elem.length;
-        
         elem = BitCoverter.getBytes(dcuTimeSyncReqID);
         System.arraycopy(elem, 0, binaryData, offset, elem.length);
         offset += elem.length;
-        
         elem = BitCoverter.getBytes(serverTime);
         System.arraycopy(elem, 0, binaryData, offset, elem.length);
-        
         return binaryData;
     }
-    
 }

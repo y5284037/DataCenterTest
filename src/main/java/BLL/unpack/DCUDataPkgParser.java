@@ -20,7 +20,6 @@ import BLL.util.BitCoverter;
 
 public class DCUDataPkgParser {
     
-    
     /**
      * 解包硬件的包头,然后根据通信协议解包
      * @param dcuDataPkgInfo DCU数据包信息包实体类
