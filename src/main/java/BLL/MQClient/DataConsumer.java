@@ -48,7 +48,7 @@ public class DataConsumer extends DefaultConsumer {
         String dtuID = DataJson.getString("DTUID");
         byte[] dtuData = decoder.decode(data);
         String routingKey = Produce.outToCdzs;
-        unPackProcess.unpackData(routingKey,dtuID, dtuData);
+        unPackProcess.unpackData(routingKey, dtuID, dtuData);
         channel.basicAck(envelope.getDeliveryTag(), false);
         
     }

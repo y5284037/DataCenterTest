@@ -29,20 +29,36 @@ public class DCUPortDataPkgParser_P1 {
     
     private DigitSignalDataParser digitSignalDataParser = new DigitSignalDataParser();
     
-    public  boolean Unpack(DCUCollectData collectData, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData, int offset) {
+    /**
+     * 冰魔方解包入口
+     *
+     * @param collectData    冰心端口数据实体类
+     * @param dtuID          数据传输单元ID
+     * @param dcuDataPkgInfo 监测器数据包信息
+     * @param dtuData        监测器采集数据包
+     * @param offset         偏移量
+     * @return 是否解包成功
+     */
+    public boolean Unpack(DCUCollectData collectData, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData, int offset) {
         //端口采集数据包解包
-        donUnpack(collectData, dtuData, offset);
+        try {
+            donUnpack(collectData, dtuData, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         
         return true;
     }
     
     /**
      * 冰魔方端口采集数据解包
+     *
      * @param collectData 采集数据实体类
-     * @param dtuData dtu上行数据包
-     * @param offset 偏移量
+     * @param dtuData     dtu上行数据包
+     * @param offset      偏移量
      */
-    private  void donUnpack(DCUCollectData collectData, byte[] dtuData, int offset) {
+    private void donUnpack(DCUCollectData collectData, byte[] dtuData, int offset) {
         int unpackedBytes = 0;
         //获取数据包ID
         collectData.setPkgID(BitCoverter.toUint16(dtuData, offset + unpackedBytes));
@@ -60,13 +76,14 @@ public class DCUPortDataPkgParser_P1 {
     
     /**
      * 冰魔方端口采集数据,冰魔方的打包是按照顺序打包,并且全部发送的.
+     *
      * @param collectData 解包数据实体类
-     * @param first_port 开始端口号
-     * @param last_prot 最终端口号
-     * @param dtuData dtu数据包
-     * @param offset 偏移量
+     * @param first_port  开始端口号
+     * @param last_prot   最终端口号
+     * @param dtuData     dtu数据包
+     * @param offset      偏移量
      */
-    private  void unpackPortData(DCUCollectData collectData, int first_port, int last_prot, byte[] dtuData, int offset) {
+    private void unpackPortData(DCUCollectData collectData, int first_port, int last_prot, byte[] dtuData, int offset) {
         int unpackedBytes = 0;
         long collectTIME = collectData.getCollectTimestamp();
         HashMap<Byte/*端口类型*/, List<DCUPortData>> portData = collectData.getData();

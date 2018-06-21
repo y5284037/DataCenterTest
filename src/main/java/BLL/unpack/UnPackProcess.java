@@ -31,7 +31,6 @@ public class UnPackProcess {
     private Base64.Encoder encoder = Base64.getEncoder();
     private Produce produce = new Produce();
     
-    
     /**
      * @param dtuID
      * @param dtuData
@@ -58,7 +57,6 @@ public class UnPackProcess {
         System.out.println(collectData);
     }
     
-    
     private void HandleDCUDataPkg_P1(String routingKey, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, DCUCollectData collectData, byte[] dtuData, int offset) {
         
         collectData.setData(new HashMap<Byte, List<DCUPortData>>());
@@ -67,6 +65,7 @@ public class UnPackProcess {
             case DCUDataPkgType.
                     DCU_PORT_ACQ_DATA:
                 if (dcuPortDataPkgParser_p1.Unpack(collectData, dtuID, dcuDataPkgInfo, dtuData, offset)) {
+                    HandleDCUPortData(routingKey, dtuID, collectData, dcuDataPkgInfo);
                 }
                 break;
             //时间同步请求包
@@ -74,6 +73,7 @@ public class UnPackProcess {
                     .TIME_SYNC_REQUEST:
                 timeSyncHandler.handleTimeSyncRequest(routingKey, dtuID, dcuDataPkgInfo.getDcuInfo(), dtuData, offset);
                 break;
+            default:
         }
     }
     
@@ -97,7 +97,6 @@ public class UnPackProcess {
     private void HandleDCUPortData(String routingKey, String dtuID, DCUCollectData collectData, DcuDataPkgInfo dcuDataPkgInfo) {
         // 处理一个收到的合法的、非重复的数据包
         HandleNewPortDataPkg(routingKey, dtuID, collectData, dcuDataPkgInfo);
-        
     }
     
     private void HandleNewPortDataPkg(String routingKey, String dtuID, DCUCollectData collectData, DcuDataPkgInfo dcuDataPkgInfo) {
@@ -108,9 +107,7 @@ public class UnPackProcess {
         
         // 5.向监测器返回数据包接收回执
         AckRecvDCUPortDataPkg(routingKey, dtuID, dcuID, pkgID, collectTimestamp);
-        
     }
-    
     
     /**
      * 发送数据包回执
@@ -128,8 +125,7 @@ public class UnPackProcess {
             serverRecvDCUPortDataAck = new ServerRecvDCUPortDataAck();
             dataPkgAcks.put(dcuID, serverRecvDCUPortDataAck);
         }
-        
-        serverRecvDCUPortDataAck.ackQueue.offer(new RecvDCUPortDataAck((int) dcuID, (short) pkgID));
+        serverRecvDCUPortDataAck.ackQueue.offer(serverRecvDCUPortDataAck.new RecvDCUPortDataAck((int) dcuID, (short) pkgID));
         JSONObject dtuOutData = new JSONObject();
         dtuOutData.put("DTUID", dtuID);
         dtuOutData.put("Data", encoder.encodeToString(serverRecvDCUPortDataAck.Serialize()));

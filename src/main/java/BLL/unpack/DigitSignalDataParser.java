@@ -26,7 +26,7 @@ public class DigitSignalDataParser {
      * @param collectTime 采集时间
      * @param dtuData DTU数据
      * @param offset  偏移量
-     * @return
+     * @return 已解字节数
      */
     public  int UnpackDigitSignalData(List<DigitSignalData> digitSignalDataList, long collectTime, byte[] dtuData, int offset) {
         int unpackedBytes = 0;

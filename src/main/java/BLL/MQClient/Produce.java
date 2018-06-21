@@ -1,9 +1,9 @@
 package BLL.MQClient;
 
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.AMQP.BasicProperties;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class Produce {
     
     private Channel channel;
-    private static BasicProperties  properties;
+    private static BasicProperties properties;
     
     public static String outToCdzs;
     public static String outToBT;
@@ -64,7 +64,7 @@ public class Produce {
     
     public boolean publish(String routingKey, byte[] message) {
         try {
-            channel.basicPublish(exchange,routingKey,properties,message);
+            channel.basicPublish(exchange, routingKey, properties, message);
             
         } catch (IOException e) {
             System.out.println("发送失败,出现IO异常!");

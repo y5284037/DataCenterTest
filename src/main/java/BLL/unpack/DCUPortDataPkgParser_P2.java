@@ -28,9 +28,24 @@ public class DCUPortDataPkgParser_P2 {
     
     private DigitSignalDataParser digitSignalDataParser = new DigitSignalDataParser();
     
+    /**
+     * 冰心解包入口
+     *
+     * @param collectData    冰心端口数据实体类
+     * @param dtuID          数据传输单元ID
+     * @param dcuDataPkgInfo 监测器数据包信息
+     * @param dtuData        监测器采集数据包
+     * @param offset         偏移量
+     * @return 是否解包成功
+     */
     public boolean Unpack(DCUCollectData collectData, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData, int offset) {
         //端口采集数据包解包
-        doUnpack(collectData, dtuData, offset);
+        try {
+            doUnpack(collectData, dtuData, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
     
@@ -39,10 +54,10 @@ public class DCUPortDataPkgParser_P2 {
      * 冰心数据包解包函数
      *
      * @param collectData 采集数据包实体类
-     * @param dtuData DTU数据包
-     * @param offset 偏移量
+     * @param dtuData     DTU数据包
+     * @param offset      偏移量
      */
-    private  void doUnpack(DCUCollectData collectData, byte[] dtuData, int offset) {
+    private void doUnpack(DCUCollectData collectData, byte[] dtuData, int offset) {
         int unpackedBytes = 0;
         //解包打包ID和采集时间
         collectData.setPkgID(BitCoverter.toUint16(dtuData, offset + unpackedBytes));
@@ -76,7 +91,7 @@ public class DCUPortDataPkgParser_P2 {
      * @param dtuData     原始数据
      * @param offset      偏移量
      */
-    private  int unpackPortData(HashMap<Byte, List<DCUPortData>> portData, long collectTime, byte portType, int first_port, int last_port, byte[] dtuData, int offset) {
+    private int unpackPortData(HashMap<Byte, List<DCUPortData>> portData, long collectTime, byte portType, int first_port, int last_port, byte[] dtuData, int offset) {
         //声明变量
         int unpackedBytes = 0;
         List<DCUPortData> dcuPortData = new ArrayList<>();

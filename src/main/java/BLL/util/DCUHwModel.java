@@ -19,16 +19,27 @@ public class DCUHwModel {
     private static Logger logger = Logger.getLogger(DCUHwModel.class);
     private static JSONObject hwModel;
     
+    /**
+     * 进行json对象的初始化
+     */
     static {
         hwModel = new JSONObject();
         LoadHardwareModelConfig();//在静态代码块中执行是为了作为驱动加载一次
     }
     
+    /**
+     * 读取硬件配置文件
+     */
     @SuppressWarnings("unchecked")
     private static void LoadHardwareModelConfig() {
         hwModel = JSONCoverter.JsonFileToMap("HardwareModelConfig.json");
     }
     
+    /**
+     * 获取到硬件版本号
+     * @param modelNum 对应版本号值的key
+     * @return
+     */
     public static String getName(int modelNum){
         
         return hwModel.getString(Integer.toString(modelNum));

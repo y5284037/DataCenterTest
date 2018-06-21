@@ -22,11 +22,12 @@ public class DCUDataPkgParser {
     
     /**
      * 解包硬件的包头,然后根据通信协议解包
+     *
      * @param dcuDataPkgInfo DCU数据包信息包实体类
-     * @param dtuData Dcu数据包
+     * @param dtuData        Dcu数据包
      * @return 已解字节数
      */
-    public  int unpackDCUDataPkgInfo(DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData) {
+    public int unpackDCUDataPkgInfo(DcuDataPkgInfo dcuDataPkgInfo, byte[] dtuData) {
         int unpackedBytes = 0;
         //获取协议版本号
         dcuDataPkgInfo.setProtocolVerNum(dtuData[0]);
@@ -39,12 +40,13 @@ public class DCUDataPkgParser {
     
     /**
      * 硬件信息，一般情况下结构化的格式不变
+     *
      * @param dcuInfo DCU信息实体类
      * @param dtuData DCU数据包
-     * @param offset 偏移量
+     * @param offset  偏移量
      * @return 已解字节数
      */
-    public  int unpackDCUInfo(DCUInfo dcuInfo, byte[] dtuData, int offset) {
+    public int unpackDCUInfo(DCUInfo dcuInfo, byte[] dtuData, int offset) {
         int unpackedBytes = 0;
         //获取DCUID
         dcuInfo.setDcuID(BitCoverter.toUint32(dtuData, offset + unpackedBytes));
@@ -66,7 +68,7 @@ public class DCUDataPkgParser {
         long fwMinorVersion = (fw_ver & CommonConvention.FW_MINOR_VER_BITS_AND) >> CommonConvention.FW_MINOR_VER_RIGHT_SHIFT_BITS;
         long fwPatchVersion = (fw_ver & CommonConvention.FW_PATCH_VER_BITS_AND);
         dcuInfo.setFirmwareVersion(String.valueOf(fwMajorVersion) + "." + String.valueOf(fwMinorVersion) + "." + String.valueOf(fwPatchVersion));
-        return unpackedBytes+offset;
+        return unpackedBytes + offset;
     }
     
     

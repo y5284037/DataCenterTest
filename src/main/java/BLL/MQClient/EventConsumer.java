@@ -21,6 +21,8 @@ import java.io.IOException;
  **********************************************/
 
 public class EventConsumer extends DefaultConsumer {
+    private Channel channel;
+    
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      *
@@ -28,6 +30,7 @@ public class EventConsumer extends DefaultConsumer {
      */
     public EventConsumer(Channel channel) {
         super(channel);
+        this.channel = channel;
     }
     
     @Override
@@ -36,5 +39,6 @@ public class EventConsumer extends DefaultConsumer {
         String dataIn = new String(body, "utf-8");
         JSONObject dataJson = JSON.parseObject(dataIn);
         System.out.println(dataIn);
+        channel.basicAck(envelope.getDeliveryTag(), false);
     }
 }

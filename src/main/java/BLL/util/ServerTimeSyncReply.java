@@ -2,10 +2,7 @@ package BLL.util;
 
 import BLL.constant.common.SizeOf;
 import BLL.constant.dataCenter.DataCenterPkgType;
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
-
-import java.util.Base64;
 
 /**********************************************
  *

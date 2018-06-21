@@ -24,25 +24,41 @@ public class TimeSyncHandler {
     
     private  Produce produce = new Produce();
     
-    
-    
+    /**
+     * 处理时间同步请求
+     * @param routingKey 路由绑定键
+     * @param dtuID 数据传输单元ID
+     * @param dcuInfo 数据采集单元信息
+     * @param dtuData 采集数据包
+     * @param offset 偏移量
+     */
     public void handleTimeSyncRequest(String routingKey, String dtuID, DCUInfo dcuInfo, byte[] dtuData, int offset) {
         long dcuTimeSyncReqID = BitCoverter.toUint64(dtuData, offset);
-//        unpackTimeSyncReqPkg(dcuTimeSyncReqID, dtuData, offset);
         long currentTime = System.currentTimeMillis();
         doTimeSyncRequest(routingKey, dtuID, dcuInfo, dcuTimeSyncReqID, currentTime);
-        
     }
     
-    private boolean doTimeSyncRequest(String routingKey, String dtuID, DCUInfo dcuInfo, long dcuTimeSyncReqID, long currentTime) {
+    /**
+     * 发送时间同步应答
+     * @param routingKey 路由绑定键
+     * @param dtuID 数据传输单元ID
+     * @param dcuInfo 数据采集单元信息
+     * @param dcuTimeSyncReqID 监测器时间同步请求ID
+     * @param currentTime  当前系统时间(ms)
+     */
+    private void doTimeSyncRequest(String routingKey, String dtuID, DCUInfo dcuInfo, long dcuTimeSyncReqID, long currentTime) {
         ServerTimeSyncReply reply = new ServerTimeSyncReply();
         reply.setDcuTimeSyncReqID(dcuTimeSyncReqID);
         reply.setServerTime(currentTime / 1000);
         produce.publish(routingKey, makeDtuOutData(dtuID, reply.serialize()));
-        return true;
     }
     
-    
+    /**
+     * 序列化时间同步应答
+     * @param dtuID 数据传输单元ID
+     * @param dtuData 需要序列化的应答数据
+     * @return 序列化之后的数据包
+     */
     private byte[] makeDtuOutData(String dtuID, byte[] dtuData) {
         Base64.Encoder encoder = Base64.getEncoder();
         JSONObject dtuOutData = new JSONObject();
@@ -53,11 +69,6 @@ public class TimeSyncHandler {
     
     /**
      * java不支持指针传递,所以只有把这个函数写到执行函数内,否则就需要使用对象对基本数据进行包装,在对象内操作.无意义
-     *
-     * @param dcuTimeSyncReqID
-     * @param dtuData
-     * @param offset
-     * @return
      */
     private int unpackTimeSyncReqPkg(long dcuTimeSyncReqID, byte[] dtuData, int offset) {
         dcuTimeSyncReqID = BitCoverter.toUint64(dtuData, offset);

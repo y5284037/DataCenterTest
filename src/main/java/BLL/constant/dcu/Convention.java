@@ -20,7 +20,7 @@ public class Convention {
     
     public static final int TOTAL_PORT_NUM = 52; // 端口总数
     
-    //不同端口的累计数量。
+    //不同端口的最后一个端口位置.
     public static final int ACC_NUM_PORT_A = NUM_PORT_A;                           // 10
     public static final int ACC_NUM_PORT_R = ACC_NUM_PORT_A + NUM_PORT_R;         // 20
     public static final int ACC_NUM_PORT_KWH = ACC_NUM_PORT_R + NUM_PORT_KWH;    // 22

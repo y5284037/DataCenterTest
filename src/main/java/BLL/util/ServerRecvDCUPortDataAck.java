@@ -2,7 +2,6 @@ package BLL.util;
 
 import BLL.constant.common.SizeOf;
 import BLL.constant.dataCenter.DataCenterPkgType;
-import BLL.model.RecvDCUPortDataAck;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,17 @@ public class ServerRecvDCUPortDataAck {
     
     public FixedQueue<RecvDCUPortDataAck> ackQueue;
     
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public  class RecvDCUPortDataAck {
+        private int DCUID;
+        private Short DCUDataPkgID;
+    }
     
+    /**
+     * 在构造内对ackQueue进行了初始化,添加了20个无效值(DCUID=0,DCUDataPkgID=0).
+     */
     public ServerRecvDCUPortDataAck() {
         ackQueue = new FixedQueue<>(kLatestAckCount);
         int DCUID = 0;
@@ -34,6 +43,10 @@ public class ServerRecvDCUPortDataAck {
         }
     }
     
+    /**
+     * 数据包回执序列化
+     * @return 序列化后的数据包
+     */
     public byte[] Serialize() {
         int offset = 0;
         byte[] binaryData = new byte[SizeOf.INT_8 + kLatestAckCount * (SizeOf.INT_32 + SizeOf.INT_16)];

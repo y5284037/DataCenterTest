@@ -1,10 +1,6 @@
 package BLL.test;
 
 
-import BLL.util.FixedQueue;
-
-import java.util.Date;
-
 /**********************************************
  *
  //Copyright© 2014 冷云能源科技有限公司.版权所有
@@ -19,11 +15,10 @@ import java.util.Date;
 public class demo {
     
     public static void main(String[] args) {
-        FixedQueue<Integer> queue = new FixedQueue<>(20);
-        for(int i = 0; i < 40; i++) {
-            queue.offer(i);
-        }
-        System.out.println(new Date());
+        float a = 4;
+        a += a /= a * a;
         
+        System.out.println(a);
     }
 }
+

@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DCUPortData {
-    int portNum;
-    Object portValue;
+   private int portNum;
+   private Object portValue;
     
 }

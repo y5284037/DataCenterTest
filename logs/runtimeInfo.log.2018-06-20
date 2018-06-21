@@ -1,0 +1,13 @@
+2018-06-20 17:52:09  [ pool-1-thread-8:2 ] - [ ERROR ]  Consumer BLL.MQClient.DataConsumer@2620f89d (amq.ctag-dxA_tClxKcil_zdAoGZq5A) method handleDelivery for channel AMQChannel(amqp://guest@39.108.48.22:5672/,1000) threw an exception for channel AMQChannel(amqp://guest@39.108.48.22:5672/,1000)
+java.lang.NullPointerException
+	at BLL.unpack.UnPackProcess.AckRecvDCUPortDataPkg(UnPackProcess.java:135)
+	at BLL.unpack.UnPackProcess.HandleNewPortDataPkg(UnPackProcess.java:113)
+	at BLL.unpack.UnPackProcess.HandleDCUPortData(UnPackProcess.java:102)
+	at BLL.unpack.UnPackProcess.HandleDCUDataPkg_P2(UnPackProcess.java:89)
+	at BLL.unpack.UnPackProcess.unpackData(UnPackProcess.java:57)
+	at BLL.MQClient.DataConsumer.handleDelivery(DataConsumer.java:51)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:104)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
