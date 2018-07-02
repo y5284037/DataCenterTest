@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
  *
  **********************************************/
 
-public class MQTaskConfig {
+public class MQ_Config {
     
     public static JSONObject dtuDataToMQTask;
     public static JSONObject dtuEventToMQTask;

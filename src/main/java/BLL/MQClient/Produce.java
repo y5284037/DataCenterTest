@@ -35,17 +35,17 @@ public class Produce {
         AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
         builder.deliveryMode(2);//2代表持久化,1代表不持久化
         properties = builder.build();
-        outToCdzs = (String) MQTaskConfig.dataOutQueue.get(0);
-        outToBT = (String) MQTaskConfig.dataOutQueue.get(1);
-        exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
+        outToCdzs = (String) MQ_Config.dataOutQueue.get(0);
+        outToBT = (String) MQ_Config.dataOutQueue.get(1);
+        exchange = MQ_Config.mqToDTUTask.getString("exchange");
            /* //声明exchange和queue
            Connection connection = RabbitFactory.getConnection();
             Channel channel = connection.createChannel();
-            String exchange = MQTaskConfig.mqToDTUTask.getString("exchange");
-            String exchangeType = MQTaskConfig.mqToDTUTask.getString("exchangeType");
+            String exchange = MQ_Config.mqToDTUTask.getString("exchange");
+            String exchangeType = MQ_Config.mqToDTUTask.getString("exchangeType");
             channel.exchangeDeclare(exchange, exchangeType, true, false, null);
             //将配置文件中的所有queue声明.
-            for (Object queue : MQTaskConfig.dataOutQueue) {
+            for (Object queue : MQ_Config.dataOutQueue) {
                 channel.queueDeclare((String) queue, true, false, false, null);
             }
             channel.close();

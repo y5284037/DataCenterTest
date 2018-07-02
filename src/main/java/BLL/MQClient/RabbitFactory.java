@@ -29,9 +29,9 @@ public class RabbitFactory {
      * @return RabbitMQ的连接
      */
     public static Connection getConnection() {
-        String rabbitHost = MQTaskConfig.mqToDTUTask.getString("host");
-        String rabbitUserName = MQTaskConfig.mqToDTUTask.getString("userName");
-        String rabbitPassword = MQTaskConfig.mqToDTUTask.getString("userPassword");
+        String rabbitHost = MQ_Config.mqToDTUTask.getString("host");
+        String rabbitUserName = MQ_Config.mqToDTUTask.getString("userName");
+        String rabbitPassword = MQ_Config.mqToDTUTask.getString("userPassword");
         ConnectionFactory connectionFacory = new ConnectionFactory();
         
         connectionFacory.setHost(rabbitHost);

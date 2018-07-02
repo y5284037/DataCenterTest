@@ -22,13 +22,14 @@ public class DigitSignalDataParser {
     
     /**
      * 解包开关，报警以及C类，DV类,B类的数据包信息
+     *
      * @param digitSignalDataList 用于存储数字信号数据的集合
-     * @param collectTime 采集时间
-     * @param dtuData DTU数据
-     * @param offset  偏移量
+     * @param collectTime         采集时间
+     * @param dtuData             DTU数据
+     * @param offset              偏移量
      * @return 已解字节数
      */
-    public  int UnpackDigitSignalData(List<DigitSignalData> digitSignalDataList, long collectTime, byte[] dtuData, int offset) {
+    public int UnpackDigitSignalData(List<DigitSignalData> digitSignalDataList, long collectTime, byte[] dtuData, int offset) {
         int unpackedBytes = 0;
         int num = dtuData[offset + unpackedBytes] & 0xFF;
         unpackedBytes += SizeOf.INT_8;

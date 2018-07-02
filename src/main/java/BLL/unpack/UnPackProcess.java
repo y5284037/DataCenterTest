@@ -32,8 +32,11 @@ public class UnPackProcess {
     private Produce produce = new Produce();
     
     /**
-     * @param dtuID
-     * @param dtuData
+     * 解包数据函数
+     *
+     * @param routingKey 路由键
+     * @param dtuID      数据传输单元ID
+     * @param dtuData    DCU采集数据包
      */
     public void unpackData(String routingKey, String dtuID, byte[] dtuData) {
         DcuDataPkgInfo dcuDataPkgInfo = new DcuDataPkgInfo();
@@ -44,61 +47,92 @@ public class UnPackProcess {
         
         DCUCollectData collectData = new DCUCollectData();
         switch (dcuDataPkgInfo.getProtocolVerNum()) {
-            case CommunicationProtocolVersion.
-                    PROTOCOL_1:
+            case CommunicationProtocolVersion.PROTOCOL_1:
                 HandleDCUDataPkg_P1(routingKey, dtuID, dcuDataPkgInfo, collectData, dtuData, unpackedBytes);
                 break;
-            case CommunicationProtocolVersion.
-                    PROTOCOL_2:
+            case CommunicationProtocolVersion.PROTOCOL_2:
                 HandleDCUDataPkg_P2(routingKey, dtuID, dcuDataPkgInfo, collectData, dtuData, unpackedBytes);
                 break;
+            default:
         }
         System.out.println(dcuDataPkgInfo);
         System.out.println(collectData);
     }
     
+    /**
+     * 冰魔方数据处理函数
+     *
+     * @param routingKey     路由键
+     * @param dtuID          数据传输单元ID
+     * @param dcuDataPkgInfo DCU数据包信息
+     * @param collectData    DCU端口采集数据
+     * @param dtuData        DCU采集数据包
+     * @param offset         偏移量
+     */
     private void HandleDCUDataPkg_P1(String routingKey, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, DCUCollectData collectData, byte[] dtuData, int offset) {
         
         collectData.setData(new HashMap<Byte, List<DCUPortData>>());
         switch (dcuDataPkgInfo.getDataPkgType()) {
             //端口数据包
-            case DCUDataPkgType.
-                    DCU_PORT_ACQ_DATA:
+            case DCUDataPkgType.DCU_PORT_ACQ_DATA:
                 if (dcuPortDataPkgParser_p1.Unpack(collectData, dtuID, dcuDataPkgInfo, dtuData, offset)) {
                     HandleDCUPortData(routingKey, dtuID, collectData, dcuDataPkgInfo);
                 }
                 break;
             //时间同步请求包
-            case DCUDataPkgType
-                    .TIME_SYNC_REQUEST:
+            case DCUDataPkgType.TIME_SYNC_REQUEST:
                 timeSyncHandler.handleTimeSyncRequest(routingKey, dtuID, dcuDataPkgInfo.getDcuInfo(), dtuData, offset);
                 break;
             default:
         }
     }
     
+    /**
+     * 冰心数据处理函数
+     *
+     * @param routingKey     路由键
+     * @param dtuID          数据传输单元ID
+     * @param dcuDataPkgInfo DCU数据包信息
+     * @param collectData    DCU端口采集数据
+     * @param dtuData        DCU采集数据包
+     * @param offset         偏移量
+     */
     private void HandleDCUDataPkg_P2(String routingKey, String dtuID, DcuDataPkgInfo dcuDataPkgInfo, DCUCollectData collectData, byte[] dtuData, int offset) {
         collectData.setData(new HashMap<Byte, List<DCUPortData>>());
         switch (dcuDataPkgInfo.getDataPkgType()) {
-            case DCUDataPkgType.
-                    DCU_PORT_ACQ_DATA:
+            case DCUDataPkgType.DCU_PORT_ACQ_DATA:
                 if (dcuPortDataPkgParser_p2.Unpack(collectData, dtuID, dcuDataPkgInfo, dtuData, offset)) {
                     HandleDCUPortData(routingKey, dtuID, collectData, dcuDataPkgInfo);
                 }
                 break;
             //时间同步请求包
-            case DCUDataPkgType
-                    .TIME_SYNC_REQUEST:
+            case DCUDataPkgType.TIME_SYNC_REQUEST:
                 timeSyncHandler.handleTimeSyncRequest(routingKey, dtuID, dcuDataPkgInfo.getDcuInfo(), dtuData, offset);
                 break;
         }
     }
     
+    /**
+     * 数据解析后处理函数
+     *
+     * @param routingKey     路由键
+     * @param dtuID          数据传输单元ID
+     * @param collectData    DCU端口采集数据
+     * @param dcuDataPkgInfo DCU数据包信息
+     */
     private void HandleDCUPortData(String routingKey, String dtuID, DCUCollectData collectData, DcuDataPkgInfo dcuDataPkgInfo) {
         // 处理一个收到的合法的、非重复的数据包
         HandleNewPortDataPkg(routingKey, dtuID, collectData, dcuDataPkgInfo);
     }
     
+    /**
+     * 处理一个新的合法的数据包((进行回执调用以及持久化))
+     *
+     * @param routingKey     路由键
+     * @param dtuID          数据传输单元ID
+     * @param collectData    DCU端口采集数据
+     * @param dcuDataPkgInfo DCU数据包信息
+     */
     private void HandleNewPortDataPkg(String routingKey, String dtuID, DCUCollectData collectData, DcuDataPkgInfo dcuDataPkgInfo) {
         long dcuID = dcuDataPkgInfo.getDcuInfo().getDcuID();
         int pkgID = collectData.getPkgID();
@@ -112,10 +146,10 @@ public class UnPackProcess {
     /**
      * 发送数据包回执
      *
-     * @param dtuID
-     * @param dcuID
-     * @param pkgID
-     * @param collectTimestamp
+     * @param dtuID            数据传输单元ID
+     * @param dcuID            数据采集单元ID
+     * @param pkgID            DCU数据包ID
+     * @param collectTimestamp DCU数据采集时间
      */
     private void AckRecvDCUPortDataPkg(String rouyingKey, String dtuID, long dcuID, int pkgID, long collectTimestamp) {
         ServerRecvDCUPortDataAck serverRecvDCUPortDataAck;

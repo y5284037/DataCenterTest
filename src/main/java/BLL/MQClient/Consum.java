@@ -32,8 +32,8 @@ public class Consum {
      */
     private void startEventConsum() {
         try {
-            String eventQueue = MQTaskConfig.dtuEventToMQTask.getString("queue");
-            int eventChannelNum = Integer.valueOf(MQTaskConfig.dtuEventToMQTask.getString("channel"));
+            String eventQueue = MQ_Config.dtuEventToMQTask.getString("queue");
+            int eventChannelNum = Integer.valueOf(MQ_Config.dtuEventToMQTask.getString("channel"));
             Channel eventChannel = RabbitFactory.getConnection().createChannel(eventChannelNum);
             EventConsumer eventConsumer = new EventConsumer(eventChannel);
             eventChannel.basicConsume(eventQueue, false, eventConsumer);
@@ -47,8 +47,8 @@ public class Consum {
      */
     private void startDataConsum() {
         try {
-            String dataQueue = MQTaskConfig.dtuDataToMQTask.getString("queue");
-            int dataChannelNum = Integer.valueOf(MQTaskConfig.dtuDataToMQTask.getString("channel"));
+            String dataQueue = MQ_Config.dtuDataToMQTask.getString("queue");
+            int dataChannelNum = Integer.valueOf(MQ_Config.dtuDataToMQTask.getString("channel"));
             Channel dataChannel = RabbitFactory.getConnection().createChannel(dataChannelNum);
             DataConsumer dataConsumer = new DataConsumer(dataChannel);
             dataChannel.basicConsume(dataQueue, false, dataConsumer);

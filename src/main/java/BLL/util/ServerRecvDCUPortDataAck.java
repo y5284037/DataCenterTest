@@ -19,14 +19,14 @@ import lombok.NoArgsConstructor;
 
 public class ServerRecvDCUPortDataAck {
     private final byte kDataPkgType = DataCenterPkgType.RECV_DCU_PORT_DATA_ACK;
-    private final int kLatestAckCount = 20;//注意dcu数据pkg ID包含20个以前从DTU发送的pkg ID。
+    private final int kLatestAckCount = 20;//注意dcu数据pkg ID包含19个以前从DTU发送的pkg ID。
     
     public FixedQueue<RecvDCUPortDataAck> ackQueue;
     
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public  class RecvDCUPortDataAck {
+    public class RecvDCUPortDataAck {
         private int DCUID;
         private Short DCUDataPkgID;
     }
@@ -45,6 +45,7 @@ public class ServerRecvDCUPortDataAck {
     
     /**
      * 数据包回执序列化
+     *
      * @return 序列化后的数据包
      */
     public byte[] Serialize() {
